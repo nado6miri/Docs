@@ -1,172 +1,76 @@
-Mac Book 에서 Machine Learning 환경 설정하기
-========================================
+실리콘(M1, M2) 맥(Mac) OS 에서 텐서플로(TensorFlow) 설치 방법
+=====================================================
 
-** 왜 안되지 **
-
-
-# Dillinger
-## _The Last Markdown Editor, Ever_
-
-[![N|Solid](https://cldup.com/dTxpPi9lDf.thumb.png)](https://nodesource.com/products/nsolid)
-
-[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
-
-Dillinger is a cloud-enabled, mobile-ready, offline-storage compatible,
-AngularJS-powered HTML5 Markdown editor.
-
-- Type some Markdown on the left
-- See HTML in the right
-- ✨Magic ✨
-## 😍
-## Features
-
-- Import a HTML file and watch it magically convert to Markdown
-- Drag and drop images (requires your Dropbox account be linked)
-- Import and save files from GitHub, Dropbox, Google Drive and One Drive
-- Drag and drop markdown and HTML files into Dillinger
-- Export documents as Markdown, HTML and PDF
-
-Markdown is a lightweight markup language based on the formatting conventions
-that people naturally use in email.
-As [John Gruber] writes on the [Markdown site][df1]
-
-> The overriding design goal for Markdown's
-> formatting syntax is to make it as readable
-> as possible. The idea is that a
-> Markdown-formatted document should be
-> publishable as-is, as plain text, without
-> looking like it's been marked up with tags
-> or formatting instructions.
-
-This text you see here is *actually- written in Markdown! To get a feel
-for Markdown's syntax, type some text into the left window and
-watch the results in the right.
-
-## Tech
-
-Dillinger uses a number of open source projects to work properly:
-
-- [AngularJS] - HTML enhanced for web apps!
-- [Ace Editor] - awesome web-based text editor
-- [markdown-it] - Markdown parser done right. Fast and easy to extend.
-- [Twitter Bootstrap] - great UI boilerplate for modern web apps
-- [node.js] - evented I/O for the backend
-- [Express] - fast node.js network app framework [@tjholowaychuk]
-- [Gulp] - the streaming build system
-- [Breakdance](https://breakdance.github.io/breakdance/) - HTML
-to Markdown converter
-- [jQuery] - duh
-
-And of course Dillinger itself is open source with a [public repository][dill]
- on GitHub.
-
-## Installation
-
-Dillinger requires [Node.js](https://nodejs.org/) v10+ to run.
-
-Install the dependencies and devDependencies and start the server.
-
-```sh
-cd dillinger
-npm i
-node app
+## STEP 1) Xcode 개발자 도구 설치
+```sh  
+xcode-select --install  
 ```
 
-For production environments...
 
+## STEP 2) miniconda 최신버전 다운로드  
+[minicona 다운로드](https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh)
+
+
+## STEP 3) miniconda 설치  
 ```sh
-npm install --production
-NODE_ENV=production node app
+bash ./Miniconda3-latest-MacOSX-arm64.sh -b -p $HOME/miniconda
+```
+설치가 정상적으로 완료가 되었다면 아래의 명령어를 실행하여 다음과 같이 출력되는지 확인 - (base)가 표시된다.
+   ```sh
+   source ~/miniconda/bin/activate
+   ```
+출력 결과가 아래와 같이 (base)가 표시되면 정상임.  
+![miniconda install check result](./images/miniconda_source_check.png)
+
+
+### STEP 4) miniconda의 PATH 추가
+~/.zshrc 파일 맨 아래 경로 추가 / 저장 / 재실행 (source ~/.zshrc) 후 conda를 쳐서 실행된는지 확인한다.
+```sh
+export PATH="$HOME/miniconda/bin:$PATH"
 ```
 
-## Plugins
+### STEP 5) 가상환경 설치 및 tensorflow 설치   
+1. 터미널에 다음의 명령어를 입력하여 가상환경을 설치 합니다.
+   ```sh
+   conda create -n MachineLearning python=3.8
+   ```  
+   (실행결과)
+   ![Venv 생성](./images/create%20venv.png)  
 
-Dillinger is currently extended with the following plugins.
-Instructions on how to use them in your own application are linked below.
+2. 생성된 가상환경으로 전환한다.  
+   ```sh
+   conda activate MachineLearning
+   ```
 
-| Plugin | README |
-| ------ | ------ |
-| Dropbox | [plugins/dropbox/README.md][PlDb] |
-| GitHub | [plugins/github/README.md][PlGh] |
-| Google Drive | [plugins/googledrive/README.md][PlGd] |
-| OneDrive | [plugins/onedrive/README.md][PlOd] |
-| Medium | [plugins/medium/README.md][PlMe] |
-| Google Analytics | [plugins/googleanalytics/README.md][PlGa] |
+3. 가상환경에 tensorflow 설치 코드 (2.9.0 버전 설치)
+   ```
+   conda install -c apple tensorflow-deps
+   pip install tensorflow-macos==2.9.0
+   pip install tensorflow-metal==0.5.0
+   ```  
+   ![Mac-Tensorflow](./images/mac_tensorflow_release.png)  
 
-## Development
+4. pythohn 실행 후 아래와 같이 실행한다.  
+   ![Alt text](./images/tf_import_result.png)
 
-Want to contribute? Great!
+5. 가상환경을 종료하고 default로 전환한다.  
+   ```sh
+   conda deactivate
+   ```
 
-Dillinger uses Gulp + Webpack for fast developing.
-Make a change in your file and instantaneously see your updates!
 
-Open your favorite Terminal and run these commands.
 
-First Tab:
+<br><br>
+**(참고자료)**
+---
+1. **[참조링크] - M1/M2 기반 Mac Book에 tensorflow 설치 방법**  
+2. [M1/M2 기반 Mac Book에 tensorflow 설치 방법](https://teddylee777.github.io/tensorflow/tensorflow-silicon-install/#step-3-miniconda-%EC%84%A4%EC%B9%98)
 
-```sh
-node app
-```
 
-Second Tab:
+[참조링크]:<https://teddylee777.github.io/tensorflow/tensorflow-silicon-install/#step-3-miniconda-%EC%84%A4%EC%B9%98>   
 
-```sh
-gulp watch
-```
+---
 
-(optional) Third:
-
-```sh
-karma test
-```
-
-#### Building for source
-
-For production release:
-
-```sh
-gulp build --prod
-```
-
-Generating pre-built zip archives for distribution:
-
-```sh
-gulp build dist --prod
-```
-
-## Docker
-
-Dillinger is very easy to install and deploy in a Docker container.
-
-By default, the Docker will expose port 8080, so change this within the
-Dockerfile if necessary. When ready, simply use the Dockerfile to
-build the image.
-
-```sh
-cd dillinger
-docker build -t <youruser>/dillinger:${package.json.version} .
-```
-
-This will create the dillinger image and pull in the necessary dependencies.
-Be sure to swap out `${package.json.version}` with the actual
-version of Dillinger.
-
-Once done, run the Docker image and map the port to whatever you wish on
-your host. In this example, we simply map port 8000 of the host to
-port 8080 of the Docker (or whatever port was exposed in the Dockerfile):
-
-```sh
-docker run -d -p 8000:8080 --restart=always --cap-add=SYS_ADMIN --name=dillinger <youruser>/dillinger:${package.json.version}
-```
-
-> Note: `--capt-add=SYS-ADMIN` is required for PDF rendering.
-
-Verify the deployment by navigating to your server address in
-your preferred browser.
-
-```sh
-127.0.0.1:8000
-```
 ## UML diagrams
 
 You can render UML diagrams using [Mermaid](https://mermaidjs.github.io/). For example, this will produce a sequence diagram:
@@ -192,11 +96,6 @@ A --> C(Round Rect)
 B --> D{Rhombus}
 C --> D
 ```
-## License
-
-MIT
-
-**Free Software, Hell Yeah!**
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
@@ -220,3 +119,6 @@ MIT
    [PlOd]: <https://github.com/joemccann/dillinger/tree/master/plugins/onedrive/README.md>
    [PlMe]: <https://github.com/joemccann/dillinger/tree/master/plugins/medium/README.md>
    [PlGa]: <https://github.com/RahulHP/dillinger/blob/master/plugins/googleanalytics/README.md>
+
+
+
