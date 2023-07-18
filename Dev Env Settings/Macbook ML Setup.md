@@ -1,5 +1,6 @@
 실리콘(M1, M2) 맥(Mac) OS 에서 텐서플로(TensorFlow) 설치 방법
 =====================================================
+작성일(2023.07)
 
 ## STEP 1) Xcode 개발자 도구 설치
 ```sh  
@@ -23,13 +24,13 @@ bash ./Miniconda3-latest-MacOSX-arm64.sh -b -p $HOME/miniconda
 ![miniconda install check result](./images/miniconda_source_check.png)
 
 
-### STEP 4) miniconda의 PATH 추가
+## STEP 4) miniconda의 PATH 추가
 ~/.zshrc 파일 맨 아래 경로 추가 / 저장 / 재실행 (source ~/.zshrc) 후 conda를 쳐서 실행된는지 확인한다.
 ```sh
 export PATH="$HOME/miniconda/bin:$PATH"
 ```
 
-### STEP 5) 가상환경 설치 및 tensorflow 설치   
+## STEP 5) 가상환경 설치 및 tensorflow 설치   
 1. 터미널에 다음의 명령어를 입력하여 가상환경을 설치 합니다.
    ```sh
    conda create -n MachineLearning python=3.8
