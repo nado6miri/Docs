@@ -1,8 +1,32 @@
-Mac Book 에서 Machine Learning 환경 설정하기
-========================================
+VSCode 활용하기
+=============
 
-** 왜 안되지 **
+## _유용한 Plugin들...._
+**_(Markdown관련)_**  
+<img src="./images/markdownallinone_plugin.png" width="300" height="70"> 
+<img src="./images/markdownpdf_plugin.png" width="300" height="70">  
+<img src="./images/python_plugin.png" width="300" height="70">
+<img src="./images/jupyternotebook_plugin.png" width="300" height="70">  
+<img src="./images/gitlens_plugin.png" width="300" height="70">
+<img src="./images/githubcopilot_plugin.png" width="300" height="70">  
 
+<!--
+<img src="./images/markdownpdf_plugin.png" width=100% height=100%>  
+<p align="center"><img src="./images/markdownpdf_plugin.png" width="300" height="150"></p>  
+-->
+---
+## 주요 단축키
+```
+1.Command Palette : Ctrl(cmd) + Shift + P
+2.설치된 확장 플러그인 확인하기 : 확장에서 @enabled
+
+```
+---
+
+## Jupyter Notebook 사용하기
+![Alt text](./images/python%20env%20setting.png)
+
+![Alt text](./images/jupyter%20create.png)   
 
 # Dillinger
 ## _The Last Markdown Editor, Ever_
