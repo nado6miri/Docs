@@ -1,6 +1,123 @@
 Mac Book 에서 Machine Learning 환경 설정하기
 ========================================
 
+#FROM : Docker Base Image (기반이 되는 이미지, <이미지 이름>:<태그> 형식으로 설정)
+#MAINTAINER : 메인테이너 정보 (작성자 정보)
+#RUN : Shell Script 또는 명령을 실행
+#CMD : 컨테이너가 실행되었을 때 명령이 실행
+#LABEL : 라벨 작성 (docker inspect 명령으로 label 확인할 수 있습니다.)
+#EXPOSE : 호스트와 연결할 포트 번호를 설정한다.
+#ENV : 환경변수 설정
+#ADD : 파일 / 디렉터리 추가
+#COPY : 파일 복사
+#ENTRYPOINT : 컨테이너가 시작되었을 때 스크립트 실행
+#VOLUME : 볼륨 마운트
+#USER : 명령 실행할 사용자 권한 지정
+#WORKDIR : "RUN", "CMD", "ENTRYPOINT" 명령이 실행될 작업 디렉터리
+#ARG : Dockerfile 내부 변수
+#ONBUILD : 다른 이미지의 Base Image로 쓰이는 경우 실행될 명령 수행
+#SHELL : Default Shell 지정
+
+#(build)
+#docker build --no-cache -t ta_image:0.1 ./
+#(run)
+#docker run -it --name cw image_name /bin/bash  
+#  --- 중지하고 빠져 나올경우에는 exit 또는 ctrl+d
+#  --- 중지없이 빠져 나올경우에는 ctrl+p, ctrl+q
+
+#docker run -itd --name cw image_name /bin/bash
+#docker attach image_name : container 실행시 사용
+#
+#docker exec -itd image_name /bin/bash : 외부에서 컨테이너 내부 진입시....
+#docker start image_name : 모든 작업을 시작할때 우선 start를 해야 함.
+
+#(docker commit)
+#docker commit -a "sungbin.na" -m "TAF Basic Setup" taf taf:1.1 
+
+#(docker volume)
+#1. volume 생성해서 mapping : -v 컨테이너의 볼륨 디렉터리 ---> host의 /var/lib/docker/volumes/hashvalue 형태로 볼륨 생성됨.
+#  --- docker volume create myvol
+#  --- docker volume ls
+#  --- docker volume inspect myvol
+#  --- docker run -itd -v myvol:/app --name cw image_name /bin/bash  
+#2. Bind mounting : -v 를 이용해서 호스트디렉터리:컨테이너의 볼륨 디렉터리 를 매핑 - 직관적
+#docker run -it -v /Users/tvswtdd/workspace:/home/workspace/ --device /dev/tty.usbserial-FT8ZXUYR --name cw taf:1.0 /bin/bash 
+
+
+#공유기 - admin/admin123
+
+
+
+#1. Ubuntu 18.04 download
+FROM        ubuntu:18.04 as Base
+#FROM        mongo:latest
+MAINTAINER  sungbin.na@lge.com
+
+#2. pacage update
+RUN apt update
+RUN apt-get update
+
+#3. toolchain, tools install
+RUN apt-get install -y build-essential
+RUN apt-get install -y apt-utils
+RUN apt-get install -y curl
+RUN apt-get install -y wget
+
+#4. nodejs install
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
+RUN apt-get install -y nodejs
+RUN node -v && \ 
+    npm -v
+
+#5. git install
+RUN apt-get install -y git
+
+#6. Python install
+RUN apt-get install -y python3.6
+RUN apt-get install -y python3-dev
+RUN apt-get install -y python3-setuptools
+RUN apt-get install -y python3-pip
+
+#7. 기본 작업 디렉터리 설정
+WORKDIR /home
+RUN mkdir workspace
+WORKDIR /home/workspace
+
+#8. 여기서 부터는 TAF 설치 하기 위해 git에서 TAF/Test Code 받아오고 기본적인 셋업 하는 부분임.
+#이 부분은 wall에서 ssh로 자동 인증받아 git pull 하기 위해 필요한 부분인데 수동으로 해 주는게 보안측면에서 좋음.
+#File Copy : local --> docker image
+#ssh-keygen -t rsa 을 한 다음에 /root/.ssh/id_rsa.pub 파을을 cat 해서 wall.lge.com에 login해서 개인 설정에 붙여 넣기 함.
+# SSH 서버에 public key 전송하기 : scp $HOME/.ssh/id_rsa.pub {userid}@{ip address}:id_rsa.pub
+# SSH 서버의 authorized_keys에 public key 등록하기 : cat $HOME/id_rsa.pub >> $HOME/.ssh/authorized_keys
+
+
+#9. TAF Clonegotj prerequisites.sh 실행해서 셋업함. 이 부분도 직접 해주는게 편함.
+# workspace 폴더로 가서 git clone한다.
+# git clone ssh://sungbin.na@wall.lge.com:29448/webos-pro/automation-tests
+# cd automation-test
+# git checkout @49.webos4tv
+# ./prerequisites.sh
+#여기까지 docker image 생성해서 base 이미지로 사용하면 됨.
+#--------------------------------
+#(docker run with common file folder/volume)
+# docker run -it --name cw image_name /bin/bash 
+# docker run -it -v /Users/tvswtdd/workspace:/home/workspace --name cw taf:1.3 /bin/bash  
+# docker run -it --rm -v /Users/tvswtdd/workspace:/home/workspace --name cw taf:1.5 /bin/bash  
+
+# docker run -it -v /Users/tvswtdd/workspace:/home/workspace --device /dev/tty.usbserial-FT8ZXUYR --name cw taf:1.3 /bin/bash  (동작안함)
+# docker run -it -v /Users/tvswtdd/workspace:/home/workspace --privileged -v /dev:/dev --name cw taf:1.2 /bin/bash  (동작안함)
+# docker run -it -v /Users/tvswtdd/workspace:/home/workspace --privileged -v /dev/tty.usbserial-FT8ZXUYR:/dev/tty.usbserial-FT8ZXUYR --name cw taf:1.2 /bin/bash  (ok)
+#test script 실행
+#List File 실행 : ./qa-test-runner.py -i 192.168.0.41 -l ./lists/production/P2-InputSwitch.list
+#단위 Script실행 : ./qa-test-runner.py -i 192.168.0.18 ./p2/APP/SettingsApiUpdate.py
+
+
+# serial cable terminal 연결방법
+# screen /dev/tty.usbserial-FT8ZXUYR 115200
+# ssh -v -oHostKeyAlgorithms=+ssh-rsa root@192.168.0.18 (tv ip)
+
+
+# MAC 관련 Docker 환경 : https://defian.tistory.com/entry/Docker-MAC-%EA%B4%80%EB%A0%A8-Docker-%ED%99%98%EA%B2%BD
 ** 왜 안되지 **
 
 
