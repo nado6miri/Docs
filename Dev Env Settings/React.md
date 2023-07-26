@@ -1,4 +1,4 @@
-Mac Book 에서 Machine Learning 환경 설정하기
+React 개발 환경설정 및 App 개발하기
 ========================================
 (React에서 Bootstrap 사용하기)
 
@@ -114,7 +114,7 @@ props의 default 값, PropTypes 지정은 class 밖에 또는 안에 할 수 있
            SyntheticEvent는 event가 종료되면 초기화 되므로 추후 참조할 일이 있으면 e.persist()를 호출해 줘야 함.
  - 별도의 event handler 정의하여 사용하기 (가독성 높이기 위해)           
 
- 5. ref 
+ 1. ref 
   - class형 component에서 ref 사용하고 
     함수형 component에서 ref 사용하려면 Hooks을 사용해야 함. 
   - 특정 input에 포커스 주기, 스크롤 박스 조작, canvas에 그림 그릴때 DOM접근을 위해 ref를 사용함.
@@ -127,10 +127,10 @@ props의 default 값, PropTypes 지정은 class 밖에 또는 안에 할 수 있
   4) MyComponent에 ref 달기
      <MyComponent ref={(ref) => {this.myComponent = ref}} 을 하면 myComponent.input  myComponent.handleClick 등 접근가능
 
-6. map (반복되는 compoenent rendering 할때 사용)
+5. map (반복되는 compoenent rendering 할때 사용)
  - map / key를 이용해서 iteration을 통해 반복되는 item을 rendering한다.
 
-7. Component의 lifecycle (page 188 그림)
+6. Component의 lifecycle (page 188 그림)
  - lifecycle Method는 총 9가지입니다. Will - 사전, Did - 사후 실행되는 메소드.
  - lifecycle Method는 3가지 카테고리로 나뉨 - Mount, Update, Unmount
   1) Mount : DOM이 생성되고 web browser 상에 나타남 - 페이지에 component가 나타남

@@ -1,24 +1,67 @@
-Mac Book 에서 Machine Learning 환경 설정하기
+Docker Container 환경 설정하기
 ========================================
+## 1. Docker란?
+   + 컨테이너 기술을 활용하는 Application 개발, 제공 및 실행을 위해 설계된 소프트웨어 컨테이너 플랫폼입니다.   
+   + Docker 컨테이너는 라이브러리, 시스템 도구, 코드, 런타임 등 애플리케이션 실행에 필요한 모든 것을 포함하고 있는 경량의 독립형 실행 컨테이너입니다.  
+   + 이를 통해 Application을 빠르게 Build / Test 및 배포를 해 주는 SW Platform임.  (한 Host에 여러 개의 서비스/App실행시 Package Dependency제거)  
 
-#FROM : Docker Base Image (기반이 되는 이미지, <이미지 이름>:<태그> 형식으로 설정)
-#MAINTAINER : 메인테이너 정보 (작성자 정보)
-#RUN : Shell Script 또는 명령을 실행
-#CMD : 컨테이너가 실행되었을 때 명령이 실행
-#LABEL : 라벨 작성 (docker inspect 명령으로 label 확인할 수 있습니다.)
-#EXPOSE : 호스트와 연결할 포트 번호를 설정한다.
-#ENV : 환경변수 설정
-#ADD : 파일 / 디렉터리 추가
-#COPY : 파일 복사
-#ENTRYPOINT : 컨테이너가 시작되었을 때 스크립트 실행
-#VOLUME : 볼륨 마운트
-#USER : 명령 실행할 사용자 권한 지정
-#WORKDIR : "RUN", "CMD", "ENTRYPOINT" 명령이 실행될 작업 디렉터리
-#ARG : Dockerfile 내부 변수
-#ONBUILD : 다른 이미지의 Base Image로 쓰이는 경우 실행될 명령 수행
-#SHELL : Default Shell 지정
+   ![Docker Concept](./images/Docker_concept.png)
 
-#(build)
+   _Docker가 사용하는 기본 Linux 커널 기능은 cgroup 및 네임스페이스입니다._ 
+
+   |**주요개념**|**설명**|**비고**|
+   |:---------:|:-----|:------:|
+   |Dockerfile|Docker Image 구성을 위한 Recipe 구성파일 (명령어 조합)| -- |
+   |Image|Container로 실행될 수 있는 SW 모음 (Read Only file)| -- |
+   |Docker Engine|Docker Image를 Container형태로 구축/실행하기 위한 오픈소스 SW| -- |
+   |Container|HW 가상화를 제공하는 VM과는 달리 사용자 공간을 추상화 하여 가상화 제공 <br> App의 독립된 실행환경 제공 목적 <br> 코드와 모든 종속성을 패키지화 하여 어플리케이션이 한 환경에서 다른 환경으로 빠르고 안정적으로 실행될 수 있게 해주는 SW장치. (Image의 Interface 개념)| -- |
+   |HUB / Registry|Docker Image를 저장 및 배포하기 위한 표준방식입니다.| -- |
+   |Volume|Docker Image / Container는 Read Only형태라 별도의 File을 저장하기 위해 Volume공간이 필요함. <br> Docker를 위한 Volume을 구성할 수도 있고 Host의 경로에 Mapping할 수도 있음.| -- |
+
+
+
+## 2. Docker File 명령어
+   + FROM : Docker Base Image (기반이 되는 이미지, <이미지 이름>:<태그> 형식으로 설정)  
+   + MAINTAINER : 메인테이너 정보 (작성자 정보)  
+   + RUN : Shell Script 또는 명령을 실행  
+   + CMD : 컨테이너가 실행되었을 때 명령이 실행  
+   + LABEL : 라벨 작성 (docker inspect 명령으로 label 확인할 수 있습니다.)  
+   + EXPOSE : 호스트와 연결할 포트 번호를 설정한다.  
+   + ENV : 환경변수 설정  
+   + ADD : 파일 / 디렉터리 추가  
+   + COPY : 파일 복사  
+   + ENTRYPOINT : 컨테이너가 시작되었을 때 스크립트 실행  
+   + VOLUME : 볼륨 마운트  
+   + USER : 명령 실행할 사용자 권한 지정  
+   + WORKDIR : "RUN", "CMD", "ENTRYPOINT" 명령이 실행될 작업 디렉터리  
+   + ARG : Dockerfile 내부 변수  
+   + ONBUILD : 다른 이미지의 Base Image로 쓰이는 경우 실행될 명령 수행  
+   + SHELL : Default Shell 지정  
+
+<br><br>
+
+## 2. Docker 명령어
+   + Container Build 하기
+   ```sh
+   docker build --no-cache -t ta_image:0.1 ./
+   ```
+   + Container Run 하기
+   ```sh
+   docker run -it --name cw image_name /bin/bash  
+   ```
+   : 중지하고 빠져 나올경우에는 exit 또는 ctrl+d, 중지없이 빠져 나올경우에는 ctrl+p, ctrl+q
+
+```sh
+docker run -itd --name cw image_name /bin/bash
+docker attach image_name : container 실행시 사용
+docker exec -itd image_name /bin/bash : 외부에서 컨테이너 내부 진입시....
+docker start image_name : 모든 작업을 시작할때 우선 start를 해야 함.
+
+```
+
+
+
+'''
 #docker build --no-cache -t ta_image:0.1 ./
 #(run)
 #docker run -it --name cw image_name /bin/bash  
